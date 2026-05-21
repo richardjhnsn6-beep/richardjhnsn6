@@ -4,197 +4,998 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roll High with AI Radio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0a0a0a; background-image: radial-gradient(circle at 20% 50%, #00ff41 0%, transparent 50%), radial-gradient(circle at 80% 80%, #00ff41 0%, transparent 50%), radial-gradient(circle at 40% 20%, #003d0f 0%, transparent 50%); background-color: #0a0a0a; color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-header { text-align: center; padding: 40px 20px; border-bottom: 2px solid #00ff41; box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); margin-bottom: 30px; }
-h1 { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; color: #00ff41; text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41; letter-spacing: 3px; margin-bottom: 10px; }
-.tagline { font-size: 1.2rem; color: #00ff41; opacity: 0.8; letter-spacing: 2px; }
-nav { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
-.tab { background: rgba(0, 255, 65, 0.1); border: 2px solid #00ff41; color: #00ff41; padding: 12px 30px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-.tab:hover,.tab.active { background: #00ff41; color: #000; box-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; transform: translateY(-2px); }
-.content { display: none; animation: fadeIn 0.5s; }
-.content.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.section { background: rgba(0, 0, 0, 0.6); border: 1px solid #00ff41; padding: 30px; margin: 20px 0; box-shadow: 0 0 20px rgba(0, 255, 65, 0.1); backdrop-filter: blur(10px); }
-h2 { font-family: 'Orbitron', sans-serif; color: #00ff41; font-size: 2rem; margin-bottom: 20px; text-shadow: 0 0 10px #00ff41; }
-.upload-box { border: 3px dashed #00ff41; padding: 60px 20px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(0, 255, 65, 0.05); }
-.upload-box:hover { background: rgba(0, 255, 65, 0.15); box-shadow: 0 0 30px rgba(0, 255, 65, 0.3); }
-.upload-box h3 { font-size: 2rem; color: #00ff41; margin-bottom: 10px; }
-input[type="file"] { display: none; }
-.btn { background: #00ff41; color: #000; border: none; padding: 15px 40px; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; box-shadow: 0 0 20px rgba(0, 255, 65, 0.5); margin: 10px 5px; }
-.btn:hover { box-shadow: 0 0 30px #00ff41, 0 0 50px #00ff41; transform: scale(1.05); }
-.chat-box { background: rgba(0, 0, 0, 0.8); border: 1px solid #00ff41; height: 400px; overflow-y: auto; padding: 20px; margin-bottom: 20px; }
-.chat-message { margin: 15px 0; padding: 12px; border-left: 3px solid #00ff41; background: rgba(0, 255, 65, 0.1); }
-.chat-input-area { display: flex; gap: 10px; }
-input[type="text"], input[type="email"], textarea { flex: 1; background: rgba(0, 0, 0, 0.8); border: 2px solid #00ff41; color: #00ff41; padding: 15px; font-family: 'Rajdhani', sans-serif; font-size: 1rem; }
-input:focus, textarea:focus { outline: none; box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
-.card { background: rgba(0, 0, 0, 0.8); border: 2px solid #00ff41; padding: 20px; transition: all 0.3s; }
-.card:hover { box-shadow: 0 0 30px rgba(0, 255, 65, 0.4); transform: translateY(-5px); }
-.card h3 { color: #00ff41; font-family: 'Orbitron', sans-serif; margin-bottom: 10px; }
-.price { font-size: 2rem; color: #00ff41; font-weight: 700; margin: 15px 0; }
-.track-list { margin-top: 20px; }
-.track-item { background: rgba(0, 0, 0, 0.8); border: 1px solid #00ff41; padding: 15px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
-audio { width: 100%; margin-top: 10px; }
-footer { text-align: center; padding: 40px 20px; border-top: 2px solid #00ff41; margin-top: 60px; color: #00ff41; opacity: 0.7; }
-@media (max-width: 768px) { h1 { font-size: 2rem; }.tab { padding: 10px 15px; font-size: 0.8rem; } }
-
-/* Merch Inspector Styles Added */
-.merch-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-.merch-tabs button { padding: 0.75rem 1.25rem; border: 1px solid #00ff41; background: rgba(0,0,0,0.8); color: #00ff41; cursor: pointer; border-radius: 6px; font-size: 14px; font-family: 'Rajdhani', sans-serif; font-weight: 600; }
-.merch-tabs button:hover { background: rgba(0, 255, 65, 0.2); }
-.merch-tabs button.active { background: #00ff41; color: #000; }
-.merch-panel { display: none; padding: 2rem; border: 1px solid #00ff41; border-radius: 8px; background: rgba(0, 0, 0, 0.8); min-height: 400px; }
-.merch-panel.active { display: block; }
-.merch-panel h3 { margin-top: 0; color: #00ff41; font-family: 'Orbitron', sans-serif; }
-.merch-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
-.merch-meta div { padding: 1rem; background: rgba(0, 255, 65, 0.1); border-radius: 6px; border: 1px solid rgba(0, 255, 65, 0.3); }
-.merch-meta strong { display: block; font-size: 12px; color: #00ff41; opacity: 0.7; }
+  :root {
+    --neon-green: #00ff41;
+    --dark-green: #003b1a;
+    --matrix-green: #0d0208;
+    --glow-green: #39ff14;
+    --bg-black: #0a0a0a;
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-green) var(--bg-black);
+  }
+  
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: var(--bg-black);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: var(--neon-green);
+    border-radius: 4px;
+  }
+  
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg-black);
+    color: #e0e0e0;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, .orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(ellipse at center, #001a0b 0%, #000000 100%);
+    overflow: hidden;
+  }
+  
+  .matrix-bg::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 65, 0.03) 2px, rgba(0, 255, 65, 0.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 255, 65, 0.03) 2px, rgba(0, 255, 65, 0.03) 4px);
+    animation: matrix-scroll 20s linear infinite;
+  }
+  
+  @keyframes matrix-scroll {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 10px var(--glow-green), 0 0 20px var(--glow-green), 0 0 30px var(--neon-green);
+  }
+  
+  .glow-border {
+    box-shadow: 0 0 10px var(--neon-green), inset 0 0 10px rgba(0, 255, 65, 0.1);
+    border: 1px solid var(--neon-green);
+  }
+  
+  .neon-btn {
+    background: transparent;
+    border: 2px solid var(--neon-green);
+    color: var(--neon-green);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .neon-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--neon-green);
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+  
+  .neon-btn:hover::before {
+    left: 0;
+  }
+  
+  .neon-btn:hover {
+    color: var(--bg-black);
+    box-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-green);
+  }
+  
+  .tab-btn {
+    position: relative;
+  }
+  
+  .tab-btn.active {
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--glow-green);
+  }
+  
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+  }
+  
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease-in;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .player-progress {
+    background: rgba(0, 255, 65, 0.1);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .player-progress-fill {
+    background: linear-gradient(90deg, var(--neon-green), var(--glow-green));
+    height: 100%;
+    width: 0%;
+    box-shadow: 0 0 10px var(--neon-green);
+    transition: width 0.1s linear;
+  }
+  
+  .merch-card {
+    background: rgba(0, 59, 26, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .merch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+    border-color: var(--neon-green);
+  }
+  
+  .chat-bubble {
+    max-width: 80%;
+    animation: slideInMessage 0.3s ease;
+  }
+  
+  @keyframes slideInMessage {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .chat-bubble.user {
+    margin-left: auto;
+    background: rgba(0, 255, 65, 0.1);
+    border: 1px solid var(--neon-green);
+  }
+  
+  .chat-bubble.ai {
+    background: rgba(0, 59, 26, 0.3);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+  }
+  
+  .typing-indicator span {
+    animation: typing 1.4s infinite;
+    display: inline-block;
+  }
+  
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.3; }
+    30% { opacity: 1; }
+  }
+  
+  input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--neon-green), 0 0 20px rgba(0, 255, 65, 0.3);
+  }
+  
+  .schedule-block {
+    border-left: 3px solid var(--neon-green);
+    transition: all 0.3s ease;
+  }
+  
+  .schedule-block:hover {
+    background: rgba(0, 255, 65, 0.05);
+    transform: translateX(5px);
+  }
+  
+  .live-indicator {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--neon-green); }
+    50% { opacity: 0.5; box-shadow: 0 0 20px var(--neon-green); }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-<header><h1>ROLL HIGH WITH AI RADIO</h1><p class="tagline">THE FUTURE OF SOUND</p></header>
-<nav>
-<button class="tab active" onclick="showTab('home')">Home</button>
-<button class="tab" onclick="showTab('musicplayer')">MusicPlayer</button>
-<button class="tab" onclick="showTab('agent')">Radio Agent</button>
-<button class="tab" onclick="showTab('shop')">Shop</button>
-<button class="tab" onclick="showTab('merch')">Merch</button>
-<button class="tab" onclick="showTab('schedule')">Live Schedule</button>
-<button class="tab" onclick="showTab('contact')">Contact</button>
-</nav>
+<div class="matrix-bg"></div>
 
-<div id="home" class="content active"><div class="section"><h2>Welcome to the High Rollers Station</h2><p style="font-size: 1.2rem; line-height: 1.8; margin: 20px 0;">This is where AI meets the underground. Drop your beats, spin the AI Radio Agent, and roll high with the future of sound. We’re not just playing music — we’re creating the next wave.</p><button class="btn" onclick="showTab('musicplayer')">Drop Your Track</button><button class="btn" onclick="showTab('agent')">Talk to AI Agent</button></div></div>
-
-<div id="musicplayer" class="content"><div class="section"><h2>MusicPlayer — Upload Your Heat</h2><div class="upload-box" onclick="document.getElementById('fileInput').click()"><h3>DROP BEAT / TRACK / SONG</h3><p>Click or drag your MP3/WAV file here</p><input type="file" id="fileInput" accept="audio/*" onchange="handleFile(event)"></div><div id="trackList" class="track-list"></div></div></div>
-
-<div id="agent" class="content"><div class="section"><h2>Radio Agent — Your AI DJ</h2><div class="chat-box" id="chatBox"><div class="chat-message"><strong>AI Agent:</strong> Sup! I’m your AI Radio Agent. Need a beat review? Want me to spin something? Ask me anything about your sound.</div></div><div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMessage()"><button class="btn" onclick="sendMessage()">Send</button></div></div></div>
-
-<div id="shop" class="content"><div class="section"><h2>Shop — Cop the Heat</h2><div class="grid"><div class="card"><h3>Beat Pack Vol. 1</h3><p>10 exclusive trap beats. Lease rights included.</p><div class="price">$49</div><button class="btn">Buy Now</button></div><div class="card"><h3>Custom Beat</h3><p>One-on-one session. Your vision, our production.</p><div class="price">$199</div><button class="btn">Book Session</button></div><div class="card"><h3>AI Mastering</h3><p>Get your track radio-ready in 60 seconds.</p><div class="price">$29</div><button class="btn">Upload & Master</button></div></div></div></div>
-
-<div id="merch" class="content"><div class="section">
-<h2>Merch Inspector</h2>
-<div class="merch-tabs">
-  <button class="active" onclick="showMerchPanel('item1', this)">Item 1</button>
-  <button onclick="showMerchPanel('item2', this)">Item 2</button>
-  <button onclick="showMerchPanel('item3', this)">Item 3</button>
-  <button onclick="showMerchPanel('item4', this)">Item 4</button>
-  <button onclick="showMerchPanel('item5', this)">Item 5</button>
-</div>
-
-<div id="item1" class="merch-panel active">
-  <h3>Merch Item 1</h3>
-  <div class="merch-meta">
-    <div><strong>Price</strong>$29.00</div>
-    <div><strong>Stock</strong>14 units</div>
-    <div><strong>SKU</strong>M1-BLK</div>
-    <div><strong>Status</strong>Active</div>
+<!-- Header -->
+<header class="sticky top-0 z-50 backdrop-blur-md bg-black/60 border-b border-green-500/30">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <div class="flex items-center gap-3">
+        <svg class="w-10 h-10 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        <div>
+          <h1 class="text-2xl font-bold glow-text text-green-400">ROLL HIGH</h1>
+          <p class="text-xs text-green-500/70 -mt-1">WITH AI RADIO</p>
+        </div>
+      </div>
+      
+      <nav class="hidden md:flex gap-8">
+        <button onclick="showTab('home')" class="tab-btn active text-sm font-semibold uppercase tracking-wider" data-tab="home">Home</button>
+        <button onclick="showTab('player')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="player">Music Player</button>
+        <button onclick="showTab('agent')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="agent">Radio Agent</button>
+        <button onclick="showTab('shop')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="shop">Shop</button>
+        <button onclick="showTab('merch')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="merch">Merch Inspector</button>
+        <button onclick="showTab('schedule')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="schedule">Live Schedule</button>
+        <button onclick="showTab('contact')" class="tab-btn text-sm font-semibold uppercase tracking-wider" data-tab="contact">Contact</button>
+      </nav>
+      
+      <button onclick="toggleMobileMenu()" class="md:hidden text-green-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div id="mobileMenu" class="hidden md:hidden pb-4">
+      <div class="flex flex-col gap-3">
+        <button onclick="showTab('home'); toggleMobileMenu()" class="text-left py-2 text-green-400">Home</button>
+        <button onclick="showTab('player'); toggleMobileMenu()" class="text-left py-2">Music Player</button>
+        <button onclick="showTab('agent'); toggleMobileMenu()" class="text-left py-2">Radio Agent</button>
+        <button onclick="showTab('shop'); toggleMobileMenu()" class="text-left py-2">Shop</button>
+        <button onclick="showTab('merch'); toggleMobileMenu()" class="text-left py-2">Merch Inspector</button>
+        <button onclick="showTab('schedule'); toggleMobileMenu()" class="text-left py-2">Live Schedule</button>
+        <button onclick="showTab('contact'); toggleMobileMenu()" class="text-left py-2">Contact</button>
+      </div>
+    </div>
   </div>
-  <p>Product description goes here. Replace this with your actual merch details.</p>
-</div>
+</header>
 
-<div id="item2" class="merch-panel">
-  <h3>Merch Item 2</h3>
-  <div class="merch-meta">
-    <div><strong>Price</strong>$35.00</div>
-    <div><strong>Stock</strong>8 units</div>
-    <div><strong>SKU</strong>M2-BLU</div>
-    <div><strong>Status</strong>Active</div>
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  
+  <!-- Home Tab -->
+  <div id="home" class="tab-content active">
+    <div class="text-center py-20">
+      <h2 class="text-6xl md:text-8xl font-black mb-6 glow-text text-green-400">WELCOME TO THE MATRIX</h2>
+      <p class="text-xl md:text-2xl text-green-300/80 mb-8 max-w-3xl mx-auto">Stream AI-curated beats, chat with our Radio Agent, and explore exclusive merch. The future of radio is here.</p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <button onclick="showTab('player')" class="neon-btn px-8 py-4 rounded-lg font-bold uppercase tracking-wider">Start Listening</button>
+        <button onclick="showTab('agent')" class="neon-btn px-8 py-4 rounded-lg font-bold uppercase tracking-wider">Talk to AI DJ</button>
+      </div>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-6 mt-16">
+      <div class="glow-border rounded-xl p-6 bg-black/40">
+        <svg class="w-12 h-12 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+        </svg>
+        <h3 class="text-xl font-bold mb-2 text-green-400">24/7 AI Radio</h3>
+        <p class="text-gray-400">Non-stop curated tracks powered by machine learning. Always fresh, always evolving.</p>
+      </div>
+      
+      <div class="glow-border rounded-xl p-6 bg-black/40">
+        <svg class="w-12 h-12 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <h3 class="text-xl font-bold mb-2 text-green-400">Interactive AI DJ</h3>
+        <p class="text-gray-400">Request tracks, get recommendations, and vibe with our intelligent radio host.</p>
+      </div>
+      
+      <div class="glow-border rounded-xl p-6 bg-black/40">
+        <svg class="w-12 h-12 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <h3 class="text-xl font-bold mb-2 text-green-400">Exclusive Merch</h3>
+        <p class="text-gray-400">Limited drops of cyberpunk-inspired apparel and collectibles from the station.</p>
+      </div>
+    </div>
   </div>
-  <p>Product description goes here.</p>
-</div>
-
-<div id="item3" class="merch-panel">
-  <h3>Merch Item 3</h3>
-  <div class="merch-meta">
-    <div><strong>Price</strong>$19.00</div>
-    <div><strong>Stock</strong>22 units</div>
-    <div><strong>SKU</strong>M3-RED</div>
-    <div><strong>Status</strong>Active</div>
+  
+  <!-- Music Player Tab -->
+  <div id="player" class="tab-content">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl font-bold mb-8 glow-text text-green-400">MUSIC PLAYER</h2>
+      
+      <div class="glow-border rounded-xl p-8 bg-black/40 mb-6">
+        <div class="flex items-center gap-6 mb-6">
+          <div class="w-32 h-32 rounded-lg glow-border bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+            <svg class="w-16 h-16 text-green-400/50" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h3 id="trackTitle" class="text-2xl font-bold text-green-400 mb-1">Synthwave Dreams</h3>
+            <p id="trackArtist" class="text-gray-400 mb-3">Neural Network</p>
+            <div class="flex items-center gap-2 text-sm">
+              <div class="live-indicator w-2 h-2 bg-green-400 rounded-full"></div>
+              <span class="text-green-400">LIVE BROADCAST</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <div class="player-progress" onclick="seekAudio(event)">
+            <div id="progressFill" class="player-progress-fill"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500 mt-2">
+            <span id="currentTime">0:00</span>
+            <span id="duration">3:42</span>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-center gap-4">
+          <button onclick="prevTrack()" class="text-green-400 hover:text-green-300 transition">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+            </svg>
+          </button>
+          <button onclick="togglePlay()" id="playBtn" class="neon-btn w-16 h-16 rounded-full flex items-center justify-center">
+            <svg id="playIcon" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg id="pauseIcon" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+            </svg>
+          </button>
+          <button onclick="nextTrack()" class="text-green-400 hover:text-green-300 transition">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="glow-border rounded-xl p-6 bg-black/40">
+        <h3 class="text-xl font-bold mb-4 text-green-400">Upload Your Track</h3>
+        <div class="border-2 border-dashed border-green-500/30 rounded-lg p-8 text-center hover:border-green-400 transition cursor-pointer" onclick="document.getElementById('fileInput').click()">
+          <svg class="w-12 h-12 text-green-400/50 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+          <p class="text-gray-400 mb-2">Drop audio file here or click to browse</p>
+          <p class="text-xs text-gray-600">MP3, WAV, OGG supported</p>
+          <input type="file" id="fileInput" class="hidden" accept="audio/*" onchange="handleFile(event)">
+        </div>
+      </div>
+      
+      <audio id="audioPlayer" class="hidden"></audio>
+    </div>
   </div>
-  <p>Product description goes here.</p>
-</div>
-
-<div id="item4" class="merch-panel">
-  <h3>Merch Item 4</h3>
-  <div class="merch-meta">
-    <div><strong>Price</strong>$42.00</div>
-    <div><strong>Stock</strong>3 units</div>
-    <div><strong>SKU</strong>M4-GRN</div>
-    <div><strong>Status</strong>Low Stock</div>
+  
+  <!-- Radio Agent Tab -->
+  <div id="agent" class="tab-content">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl font-bold mb-8 glow-text text-green-400">RADIO AGENT</h2>
+      
+      <div class="glow-border rounded-xl bg-black/40 flex flex-col h-[600px]">
+        <div class="p-6 border-b border-green-500/30">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+              <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-green-400">AI DJ Nexus</h3>
+              <p class="text-xs text-green-500/70">Online • Ready to mix</p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="chatMessages" class="flex-1 overflow-y-auto p-6 space-y-4">
+          <div class="chat-bubble ai p-4 rounded-lg">
+            <p class="text-sm">Welcome to Roll High with AI Radio! I'm Nexus, your AI DJ. Ask me for track recommendations, request songs, or just vibe. What's your frequency today? 🎵</p>
+          </div>
+        </div>
+        
+        <div class="p-6 border-t border-green-500/30">
+          <div class="flex gap-3">
+            <input 
+              type="text" 
+              id="messageInput" 
+              placeholder="Type your message..." 
+              class="flex-1 bg-black/60 border border-green-500/30 rounded-lg px-4 py-3 text-sm focus:border-green-400 transition"
+              onkeypress="if(event.key==='Enter') sendMessage()"
+            >
+            <button onclick="sendMessage()" class="neon-btn px-6 py-3 rounded-lg font-bold">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>Product description goes here.</p>
-</div>
-
-<div id="item5" class="merch-panel">
-  <h3>Merch Item 5</h3>
-  <div class="merch-meta">
-    <div><strong>Price</strong>$25.00</div>
-    <div><strong>Stock</strong>11 units</div>
-    <div><strong>SKU</strong>M5-WHT</div>
-    <div><strong>Status</strong>Active</div>
+  
+  <!-- Shop Tab -->
+  <div id="shop" class="tab-content">
+    <div class="mb-8">
+      <h2 class="text-4xl font-bold mb-2 glow-text text-green-400">SHOP</h2>
+      <p class="text-gray-400">Exclusive cyberpunk merch drops from the station</p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="merch-card rounded-xl overflow-hidden">
+        <div class="h-64 bg-gradient-to-br from-green-900/20 to-black flex items-center justify-center">
+          <svg class="w-24 h-24 text-green-400/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-400 mb-2">Matrix Hoodie</h3>
+          <p class="text-gray-400 text-sm mb-4">Limited edition glow-in-the-dark design</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-green-400">$89.00</span>
+            <button class="neon-btn px-4 py-2 rounded text-sm font-bold">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="merch-card rounded-xl overflow-hidden">
+        <div class="h-64 bg-gradient-to-br from-green-900/20 to-black flex items-center justify-center">
+          <svg class="w-24 h-24 text-green-400/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-400 mb-2">Cyber Tee</h3>
+          <p class="text-gray-400 text-sm mb-4">Neural network circuit design</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-green-400">$34.99</span>
+            <button class="neon-btn px-4 py-2 rounded text-sm font-bold">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="merch-card rounded-xl overflow-hidden">
+        <div class="h-64 bg-gradient-to-br from-green-900/20 to-black flex items-center justify-center">
+          <svg class="w-24 h-24 text-green-400/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-400 mb-2">AI Radio Beanie</h3>
+          <p class="text-gray-400 text-sm mb-4">Embroidered station logo</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-green-400">$24.99</span>
+            <button class="neon-btn px-4 py-2 rounded text-sm font-bold">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>Product description goes here.</p>
-</div>
-</div></div>
+  
+  <!-- Merch Inspector Tab -->
+  <div id="merch" class="tab-content">
+    <div class="mb-8">
+      <h2 class="text-4xl font-bold mb-2 glow-text text-green-400">MERCH INSPECTOR</h2>
+      <p class="text-gray-400">3D view of our featured collectibles</p>
+    </div>
+    
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="glow-border rounded-xl bg-black/40 p-6">
+        <div id="merchViewer" class="h-96 flex items-center justify-center mb-4">
+          <div class="text-center">
+            <div id="merchIcon" class="w-48 h-48 mx-auto mb-4 glow-border rounded-xl bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center transform hover:rotate-12 transition-transform duration-500">
+              <svg class="w-24 h-24 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+              </svg>
+            </div>
+            <p class="text-xs text-gray-500">Click items to inspect</p>
+          </div>
+        </div>
+        <div id="merchInfo" class="text-center">
+          <h3 class="text-xl font-bold text-green-400 mb-2">Select an item</h3>
+          <p class="text-gray-400 text-sm">Choose from the list to view details</p>
+        </div>
+      </div>
+      
+      <div class="space-y-3">
+        <button onclick="showMerchPanel(0)" class="w-full glow-border rounded-lg p-4 bg-black/40 text-left hover:bg-green-900/20 transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-400">NFT Vinyl Record</h4>
+              <p class="text-xs text-gray-500">Digital + Physical Collector's Item</p>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="showMerchPanel(1)" class="w-full glow-border rounded-lg p-4 bg-black/40 text-left hover:bg-green-900/20 transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-400">LED Cassette</h4>
+              <p class="text-xs text-gray-500">Retro-futuristic display piece</p>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="showMerchPanel(2)" class="w-full glow-border rounded-lg p-4 bg-black/40 text-left hover:bg-green-900/20 transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-400">Holographic Poster</h4>
+              <p class="text-xs text-gray-500">Limited edition prints</p>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="showMerchPanel(3)" class="w-full glow-border rounded-lg p-4 bg-black/40 text-left hover:bg-green-900/20 transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-400">DJ Manual Zine</h4>
+              <p class="text-xs text-gray-500">AI Radio culture handbook</p>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="showMerchPanel(4)" class="w-full glow-border rounded-lg p-4 bg-black/40 text-left hover:bg-green-900/20 transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded bg-gradient-to-br from-green-900/40 to-black flex items-center justify-center">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-green-400">Station Patch Set</h4>
+              <p class="text-xs text-gray-500">Glow-in-the-dark embroidered</p>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Live Schedule Tab -->
+  <div id="schedule" class="tab-content">
+    <div class="mb-8">
+      <h2 class="text-4xl font-bold mb-2 glow-text text-green-400">LIVE SCHEDULE</h2>
+      <p class="text-gray-400">Today's broadcast lineup • All times PST</p>
+    </div>
+    
+    <div class="space-y-4">
+      <div class="schedule-block glow-border rounded-lg p-6 bg-black/40">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="live-indicator w-3 h-3 bg-green-400 rounded-full"></div>
+              <span class="text-xs text-green-400 font-bold uppercase">Live Now</span>
+              <span class="text-xs text-gray-500">6:00 AM - 10:00 AM</span>
+            </div>
+            <h3 class="text-xl font-bold text-green-400 mb-1">Morning Matrix Flow</h3>
+            <p class="text-gray-400 text-sm mb-3">Upbeat synthwave and electronica to start your day</p>
+            <div class="flex gap-2">
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Synthwave</span>
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Ambient</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="schedule-block glow-border rounded-lg p-6 bg-black/40">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xs text-gray-500">10:00 AM - 2:00 PM</span>
+            </div>
+            <h3 class="text-xl font-bold text-green-400 mb-1">Neural Network Noon</h3>
+            <p class="text-gray-400 text-sm mb-3">Deep house and techno curated by AI analysis</p>
+            <div class="flex gap-2">
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Techno</span>
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Deep House</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="schedule-block glow-border rounded-lg p-6 bg-black/40">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xs text-gray-500">2:00 PM - 6:00 PM</span>
+            </div>
+            <h3 class="text-xl font-bold text-green-400 mb-1">Cyber Future Beats</h3>
+            <p class="text-gray-400 text-sm mb-3">Experimental electronic and glitch hop</p>
+            <div class="flex gap-2">
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Glitch</span>
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">IDM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="schedule-block glow-border rounded-lg p-6 bg-black/40">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xs text-gray-500">6:00 PM - 10:00 PM</span>
+            </div>
+            <h3 class="text-xl font-bold text-green-400 mb-1">Neon Night Drive</h3>
+            <p class="text-gray-400 text-sm mb-3">Dark synth and retrowave for evening vibes</p>
+            <div class="flex gap-2">
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Retrowave</span>
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Darksynth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="schedule-block glow-border rounded-lg p-6 bg-black/40">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-xs text-gray-500">10:00 PM - 2:00 AM</span>
+            </div>
+            <h3 class="text-xl font-bold text-green-400 mb-1">Midnight Protocols</h3>
+            <p class="text-gray-400 text-sm mb-3">Minimal techno and ambient soundscapes</p>
+            <div class="flex gap-2">
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Minimal</span>
+              <span class="text-xs px-3 py-1 rounded bg-green-900/30 text-green-400">Ambient</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Contact Tab -->
+  <div id="contact" class="tab-content">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl font-bold mb-8 glow-text text-green-400">CONTACT</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="glow-border rounded-xl p-8 bg-black/40">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">Get In Touch</h3>
+          <form onsubmit="event.preventDefault(); alert('Message sent! We\'ll get back to you soon.');">
+            <div class="mb-4">
+              <label class="block text-sm text-gray-400 mb-2">Name</label>
+              <input type="text" required class="w-full bg-black/60 border border-green-500/30 rounded-lg px-4 py-3 text-sm focus:border-green-400 transition">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm text-gray-400 mb-2">Email</label>
+              <input type="email" required class="w-full bg-black/60 border border-green-500/30 rounded-lg px-4 py-3 text-sm focus:border-green-400 transition">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm text-gray-400 mb-2">Subject</label>
+              <input type="text" required class="w-full bg-black/60 border border-green-500/30 rounded-lg px-4 py-3 text-sm focus:border-green-400 transition">
+            </div>
+            <div class="mb-6">
+              <label class="block text-sm text-gray-400 mb-2">Message</label>
+              <textarea rows="5" required class="w-full bg-black/60 border border-green-500/30 rounded-lg px-4 py-3 text-sm focus:border-green-400 transition resize-none"></textarea>
+            </div>
+            <button type="submit" class="neon-btn w-full py-3 rounded-lg font-bold uppercase tracking-wider">Transmit Message</button>
+          </form>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="glow-border rounded-xl p-6 bg-black/40">
+            <svg class="w-10 h-10 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <h4 class="font-bold text-green-400 mb-2">Email</h4>
+            <p class="text-gray-400">contact@rollhigh.ai</p>
+          </div>
+          
+          <div class="glow-border rounded-xl p-6 bg-black/40">
+            <svg class="w-10 h-10 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <h4 class="font-bold text-green-400 mb-2">Broadcast Location</h4>
+            <p class="text-gray-400">Neo Tokyo District 7<br>Cyberspace Sector 404</p>
+          </div>
+          
+          <div class="glow-border rounded-xl p-6 bg-black/40">
+            <svg class="w-10 h-10 text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h4 class="font-bold text-green-400 mb-2">Support Hours</h4>
+            <p class="text-gray-400">24/7 • Always Online<br>AI-powered response</p>
+          </div>
+          
+          <div class="glow-border rounded-xl p-6 bg-black/40">
+            <h4 class="font-bold text-green-400 mb-4">Follow The Signal</h4>
+            <div class="flex gap-4">
+              <a href="#" class="w-10 h-10 rounded-lg glow-border bg-black/60 flex items-center justify-center hover:bg-green-900/20 transition">
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-lg glow-border bg-black/60 flex items-center justify-center hover:bg-green-900/20 transition">
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-lg glow-border bg-black/60 flex items-center justify-center hover:bg-green-900/20 transition">
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</main>
 
-<div id="schedule" class="content"><div class="section"><h2>Live Schedule</h2><div class="grid"><div class="card"><h3>Monday — Midnight Cypher</h3><p>12AM - 2AM EST</p><p>Live beat battles. Submit your track to compete.</p></div><div class="card"><h3>Wednesday — AI Agent Takeover</h3><p>8PM - 10PM EST</p><p>AI spins your uploads. Chat with the agent live.</p></div><div class="card"><h3>Friday — High Roller Showcase</h3><p>10PM - 1AM EST</p><p>Featured artists. Industry guests. Major plays.</p></div></div></div></div>
-
-<div id="contact" class="content"><div class="section"><h2>Contact — Tap In</h2><p style="margin-bottom: 20px;">Want to collab? Need a custom beat? Hit us up.</p><input type="text" placeholder="Your Name" style="margin-bottom: 15px;"><input type="email" placeholder="Your Email" style="margin-bottom: 15px;"><textarea placeholder="Your Message" rows="5" style="margin-bottom: 15px;"></textarea><button class="btn">Send Message</button><p style="margin-top: 30px; opacity: 0.8;">Or DM us: @AIrollersRadio</p></div></div>
-
-<footer><p>© 2026 Roll High with AI Radio. All Rights Reserved.</p><p style="margin-top: 10px;">Powered by High Rollers Tech</p></footer>
-</div>
+<footer class="border-t border-green-500/30 mt-20 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center text-gray-500 text-sm">
+      <p class="mb-2">© 2024 Roll High with AI Radio. Broadcasting from the future.</p>
+      <p class="text-xs">Press play. Roll high. Stay connected to the matrix.</p>
+    </div>
+  </div>
+</footer>
 
 <script>
-function showTab(tabName) {
-  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabName).classList.add('active');
-  event.target.classList.add('active');
-}
-
-function handleFile(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const trackList = document.getElementById('trackList');
-    const trackDiv = document.createElement('div');
-    trackDiv.className = 'track-item';
-    trackDiv.innerHTML = `<div><strong style="color: #00ff41;">${file.name}</strong><p style="opacity: 0.7; font-size: 0.9rem;">${(file.size / 1024 / 1024).toFixed(2)} MB</p></div><audio controls src="${URL.createObjectURL(file)}"></audio>`;
-    trackList.appendChild(trackDiv);
+  // Tab functionality
+  function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    const buttons = document.querySelectorAll('.tab-btn');
+    
+    tabs.forEach(tab => tab.classList.remove('active'));
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-}
-
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const chatBox = document.getElementById('chatBox');
-  if (input.value.trim()) {
-    const userMsg = document.createElement('div');
-    userMsg.className = 'chat-message';
-    userMsg.innerHTML = `<strong>You:</strong> ${input.value}`;
-    chatBox.appendChild(userMsg);
-    setTimeout(() => {
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'chat-message';
-      aiMsg.innerHTML = `<strong>AI Agent:</strong> Bet, I hear you. That track needs more 808. Send me the file in MusicPlayer and I’ll break it down.`;
-      chatBox.appendChild(aiMsg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 1000);
+  
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+  }
+  
+  // Music Player
+  const audio = document.getElementById('audioPlayer');
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const progressFill = document.getElementById('progressFill');
+  const currentTimeEl = document.getElementById('currentTime');
+  const durationEl = document.getElementById('duration');
+  
+  const playlist = [
+    { title: 'Synthwave Dreams', artist: 'Neural Network', duration: '3:42' },
+    { title: 'Digital Horizon', artist: 'Cyber Flow', duration: '4:15' },
+    { title: 'Neon Pulse', artist: 'AI Collective', duration: '3:28' }
+  ];
+  
+  let currentTrack = 0;
+  let isPlaying = false;
+  
+  function togglePlay() {
+    if (isPlaying) {
+      audio.pause();
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+    } else {
+      // Demo mode - simulate playback since no actual audio file
+      simulatePlayback();
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+    }
+    isPlaying = !isPlaying;
+  }
+  
+  function simulatePlayback() {
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (!isPlaying) {
+        clearInterval(interval);
+        return;
+      }
+      progress += 0.5;
+      if (progress >= 100) {
+        nextTrack();
+        clearInterval(interval);
+        return;
+      }
+      progressFill.style.width = progress + '%';
+      const seconds = Math.floor((progress / 100) * 222);
+      currentTimeEl.textContent = formatTime(seconds);
+    }, 100);
+  }
+  
+  function nextTrack() {
+    currentTrack = (currentTrack + 1) % playlist.length;
+    loadTrack();
+  }
+  
+  function prevTrack() {
+    currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+    loadTrack();
+  }
+  
+  function loadTrack() {
+    const track = playlist[currentTrack];
+    document.getElementById('trackTitle').textContent = track.title;
+    document.getElementById('trackArtist').textContent = track.artist;
+    durationEl.textContent = track.duration;
+    progressFill.style.width = '0%';
+    currentTimeEl.textContent = '0:00';
+  }
+  
+  function seekAudio(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    progressFill.style.width = (percent * 100) + '%';
+  }
+  
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+  
+  function handleFile(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      audio.src = url;
+      document.getElementById('trackTitle').textContent = file.name.replace(/\.[^/.]+$/, "");
+      document.getElementById('trackArtist').textContent = 'Your Upload';
+      
+      audio.addEventListener('loadedmetadata', () => {
+        durationEl.textContent = formatTime(Math.floor(audio.duration));
+      });
+      
+      audio.play();
+      isPlaying = true;
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+      alert('Track loaded! Click play to start.');
+    }
+  }
+  
+  // Radio Agent Chat
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const messagesContainer = document.getElementById('chatMessages');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message
+    const userBubble = document.createElement('div');
+    userBubble.className = 'chat-bubble user p-4 rounded-lg ml-auto';
+    userBubble.innerHTML = `<p class="text-sm">${message}</p>`;
+    messagesContainer.appendChild(userBubble);
+    
     input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Simulate AI typing
+    const typingBubble = document.createElement('div');
+    typingBubble.className = 'chat-bubble ai p-4 rounded-lg';
+    typingBubble.innerHTML = `<p class="typing-indicator text-sm"><span>.</span><span>.</span><span>.</span></p>`;
+    messagesContainer.appendChild(typingBubble);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Generate AI response
+    setTimeout(() => {
+      typingBubble.remove();
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'chat-bubble ai p-4 rounded-lg';
+      
+      const responses = [
+        "Great track request! I'm analyzing the vibe... I recommend checking out 'Neon Nights' by Synth Collective. Want me to queue it up?",
+        "I feel that frequency! Based on your taste, you might enjoy our Cyber Future Beats set at 2 PM. It's all about that glitch wave energy.",
+        "Transmission received! Uploading your request to the neural playlist. The AI algorithms are cooking up something special for you.",
+        "Rolling high with that suggestion! Our data shows 87% of listeners with similar taste also vibed to 'Digital Dreams'. Should I add it to your queue?",
+        "Signal strong! I'm detecting good taste patterns. Have you explored our Midnight Protocols set? Perfect for late-night neural stimulation."
+      ];
+      
+      const response = responses[Math.floor(Math.random() * responses.length)];
+      aiBubble.innerHTML = `<p class="text-sm">${response}</p>`;
+      messagesContainer.appendChild(aiBubble);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 1500);
   }
-}
-
-// Merch Inspector JS - added to same location
-function showMerchPanel(id, btn) {
-  document.querySelectorAll('.merch-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.merch-tabs button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
+  
+  // Merch Inspector
+  const merchItems = [
+    {
+      name: 'NFT Vinyl Record',
+      description: 'Limited edition physical + digital collectible. Each record contains unique generative artwork and unlocks exclusive tracks.',
+      price: '$299.00'
+    },
+    {
+      name: 'LED Cassette',
+      description: 'Retro-futuristic display piece with reactive LED lighting. Plays your favorite tracks with visual spectrums.',
+      price: '$149.00'
+    },
+    {
+      name: 'Holographic Poster',
+      description: 'Limited print run of 100. Features lenticular technology that shifts between station logos.',
+      price: '$45.00'
+    },
+    {
+      name: 'DJ Manual Zine',
+      description: '45-page handbook on AI radio culture, mixing techniques, and the future of algorithmic music curation.',
+      price: '$19.99'
+    },
+    {
+      name: 'Station Patch Set',
+      description: 'Set of 5 glow-in-the-dark embroidered patches. Perfect for jackets, bags, or your cyber deck.',
+      price: '$29.99'
+    }
+  ];
+  
+  function showMerchPanel(index) {
+    const item = merchItems[index];
+    const info = document.getElementById('merchInfo');
+    const icon = document.getElementById('merchIcon');
+    
+    info.innerHTML = `
+      <h3 class="text-xl font-bold text-green-400 mb-2">${item.name}</h3>
+      <p class="text-gray-400 text-sm mb-4">${item.description}</p>
+      <div class="flex items-center justify-center gap-4">
+        <span class="text-2xl font-bold text-green-400">${item.price}</span>
+        <button class="neon-btn px-6 py-2 rounded font-bold text-sm">Add to Cart</button>
+      </div>
+    `;
+    
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => {
+      icon.style.transform = 'rotate(0deg)';
+    }, 500);
+  }
+  
+  // Initialize
+  loadTrack();
 </script>
+
 </body>
 </html>
