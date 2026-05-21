@@ -14,7 +14,7 @@ h1 { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; c
 .tagline { font-size: 1.2rem; color: #00ff41; opacity: 0.8; letter-spacing: 2px; }
 nav { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
 .tab { background: rgba(0, 255, 65, 0.1); border: 2px solid #00ff41; color: #00ff41; padding: 12px 30px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-.tab:hover, .tab.active { background: #00ff41; color: #000; box-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; transform: translateY(-2px); }
+.tab:hover,.tab.active { background: #00ff41; color: #000; box-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; transform: translateY(-2px); }
 .content { display: none; animation: fadeIn 0.5s; }
 .content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -40,7 +40,19 @@ input:focus, textarea:focus { outline: none; box-shadow: 0 0 15px rgba(0, 255, 6
 .track-item { background: rgba(0, 0, 0, 0.8); border: 1px solid #00ff41; padding: 15px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
 audio { width: 100%; margin-top: 10px; }
 footer { text-align: center; padding: 40px 20px; border-top: 2px solid #00ff41; margin-top: 60px; color: #00ff41; opacity: 0.7; }
-@media (max-width: 768px) { h1 { font-size: 2rem; } .tab { padding: 10px 15px; font-size: 0.8rem; } }
+@media (max-width: 768px) { h1 { font-size: 2rem; }.tab { padding: 10px 15px; font-size: 0.8rem; } }
+
+/* Merch Inspector Styles Added */
+.merch-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.merch-tabs button { padding: 0.75rem 1.25rem; border: 1px solid #00ff41; background: rgba(0,0,0,0.8); color: #00ff41; cursor: pointer; border-radius: 6px; font-size: 14px; font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+.merch-tabs button:hover { background: rgba(0, 255, 65, 0.2); }
+.merch-tabs button.active { background: #00ff41; color: #000; }
+.merch-panel { display: none; padding: 2rem; border: 1px solid #00ff41; border-radius: 8px; background: rgba(0, 0, 0, 0.8); min-height: 400px; }
+.merch-panel.active { display: block; }
+.merch-panel h3 { margin-top: 0; color: #00ff41; font-family: 'Orbitron', sans-serif; }
+.merch-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.merch-meta div { padding: 1rem; background: rgba(0, 255, 65, 0.1); border-radius: 6px; border: 1px solid rgba(0, 255, 65, 0.3); }
+.merch-meta strong { display: block; font-size: 12px; color: #00ff41; opacity: 0.7; }
 </style>
 </head>
 <body>
@@ -51,21 +63,138 @@ footer { text-align: center; padding: 40px 20px; border-top: 2px solid #00ff41; 
 <button class="tab" onclick="showTab('musicplayer')">MusicPlayer</button>
 <button class="tab" onclick="showTab('agent')">Radio Agent</button>
 <button class="tab" onclick="showTab('shop')">Shop</button>
+<button class="tab" onclick="showTab('merch')">Merch</button>
 <button class="tab" onclick="showTab('schedule')">Live Schedule</button>
 <button class="tab" onclick="showTab('contact')">Contact</button>
 </nav>
+
 <div id="home" class="content active"><div class="section"><h2>Welcome to the High Rollers Station</h2><p style="font-size: 1.2rem; line-height: 1.8; margin: 20px 0;">This is where AI meets the underground. Drop your beats, spin the AI Radio Agent, and roll high with the future of sound. We’re not just playing music — we’re creating the next wave.</p><button class="btn" onclick="showTab('musicplayer')">Drop Your Track</button><button class="btn" onclick="showTab('agent')">Talk to AI Agent</button></div></div>
+
 <div id="musicplayer" class="content"><div class="section"><h2>MusicPlayer — Upload Your Heat</h2><div class="upload-box" onclick="document.getElementById('fileInput').click()"><h3>DROP BEAT / TRACK / SONG</h3><p>Click or drag your MP3/WAV file here</p><input type="file" id="fileInput" accept="audio/*" onchange="handleFile(event)"></div><div id="trackList" class="track-list"></div></div></div>
+
 <div id="agent" class="content"><div class="section"><h2>Radio Agent — Your AI DJ</h2><div class="chat-box" id="chatBox"><div class="chat-message"><strong>AI Agent:</strong> Sup! I’m your AI Radio Agent. Need a beat review? Want me to spin something? Ask me anything about your sound.</div></div><div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMessage()"><button class="btn" onclick="sendMessage()">Send</button></div></div></div>
+
 <div id="shop" class="content"><div class="section"><h2>Shop — Cop the Heat</h2><div class="grid"><div class="card"><h3>Beat Pack Vol. 1</h3><p>10 exclusive trap beats. Lease rights included.</p><div class="price">$49</div><button class="btn">Buy Now</button></div><div class="card"><h3>Custom Beat</h3><p>One-on-one session. Your vision, our production.</p><div class="price">$199</div><button class="btn">Book Session</button></div><div class="card"><h3>AI Mastering</h3><p>Get your track radio-ready in 60 seconds.</p><div class="price">$29</div><button class="btn">Upload & Master</button></div></div></div></div>
-<div id="schedule" class="content"><div class="section"><h2>Live Schedule</h2><div class="grid"><div class="card"><h3>Monday — Midnight Cypher</h3><p>12AM - 2AM EST</p><p>Live beat battles. Submit your track to compete.</p></div><div class="card"><h3>Wednesday — AI Agent Takeover</h3><p>8PM - 10PM EST</p><p>AI spins your uploads. Chat with the agent live.</p></div><div class="card"><h3>Friday — High Roller Showcase</h3><p>10PM - 1AM EST</p><p>Featured artists. Industry guests. Major plays.</p></div></div>
+
+<div id="merch" class="content"><div class="section">
+<h2>Merch Inspector</h2>
+<div class="merch-tabs">
+  <button class="active" onclick="showMerchPanel('item1', this)">Item 1</button>
+  <button onclick="showMerchPanel('item2', this)">Item 2</button>
+  <button onclick="showMerchPanel('item3', this)">Item 3</button>
+  <button onclick="showMerchPanel('item4', this)">Item 4</button>
+  <button onclick="showMerchPanel('item5', this)">Item 5</button>
+</div>
+
+<div id="item1" class="merch-panel active">
+  <h3>Merch Item 1</h3>
+  <div class="merch-meta">
+    <div><strong>Price</strong>$29.00</div>
+    <div><strong>Stock</strong>14 units</div>
+    <div><strong>SKU</strong>M1-BLK</div>
+    <div><strong>Status</strong>Active</div>
+  </div>
+  <p>Product description goes here. Replace this with your actual merch details.</p>
+</div>
+
+<div id="item2" class="merch-panel">
+  <h3>Merch Item 2</h3>
+  <div class="merch-meta">
+    <div><strong>Price</strong>$35.00</div>
+    <div><strong>Stock</strong>8 units</div>
+    <div><strong>SKU</strong>M2-BLU</div>
+    <div><strong>Status</strong>Active</div>
+  </div>
+  <p>Product description goes here.</p>
+</div>
+
+<div id="item3" class="merch-panel">
+  <h3>Merch Item 3</h3>
+  <div class="merch-meta">
+    <div><strong>Price</strong>$19.00</div>
+    <div><strong>Stock</strong>22 units</div>
+    <div><strong>SKU</strong>M3-RED</div>
+    <div><strong>Status</strong>Active</div>
+  </div>
+  <p>Product description goes here.</p>
+</div>
+
+<div id="item4" class="merch-panel">
+  <h3>Merch Item 4</h3>
+  <div class="merch-meta">
+    <div><strong>Price</strong>$42.00</div>
+    <div><strong>Stock</strong>3 units</div>
+    <div><strong>SKU</strong>M4-GRN</div>
+    <div><strong>Status</strong>Low Stock</div>
+  </div>
+  <p>Product description goes here.</p>
+</div>
+
+<div id="item5" class="merch-panel">
+  <h3>Merch Item 5</h3>
+  <div class="merch-meta">
+    <div><strong>Price</strong>$25.00</div>
+    <div><strong>Stock</strong>11 units</div>
+    <div><strong>SKU</strong>M5-WHT</div>
+    <div><strong>Status</strong>Active</div>
+  </div>
+  <p>Product description goes here.</p>
+</div>
+</div></div>
+
+<div id="schedule" class="content"><div class="section"><h2>Live Schedule</h2><div class="grid"><div class="card"><h3>Monday — Midnight Cypher</h3><p>12AM - 2AM EST</p><p>Live beat battles. Submit your track to compete.</p></div><div class="card"><h3>Wednesday — AI Agent Takeover</h3><p>8PM - 10PM EST</p><p>AI spins your uploads. Chat with the agent live.</p></div><div class="card"><h3>Friday — High Roller Showcase</h3><p>10PM - 1AM EST</p><p>Featured artists. Industry guests. Major plays.</p></div></div></div></div>
+
 <div id="contact" class="content"><div class="section"><h2>Contact — Tap In</h2><p style="margin-bottom: 20px;">Want to collab? Need a custom beat? Hit us up.</p><input type="text" placeholder="Your Name" style="margin-bottom: 15px;"><input type="email" placeholder="Your Email" style="margin-bottom: 15px;"><textarea placeholder="Your Message" rows="5" style="margin-bottom: 15px;"></textarea><button class="btn">Send Message</button><p style="margin-top: 30px; opacity: 0.8;">Or DM us: @AIrollersRadio</p></div></div>
+
 <footer><p>© 2026 Roll High with AI Radio. All Rights Reserved.</p><p style="margin-top: 10px;">Powered by High Rollers Tech</p></footer>
 </div>
+
 <script>
-function showTab(tabName) { document.querySelectorAll('.content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); event.target.classList.add('active'); }
-function handleFile(event) { const file = event.target.files[0]; if (file) { const trackList = document.getElementById('trackList'); const trackDiv = document.createElement('div'); trackDiv.className = 'track-item'; trackDiv.innerHTML = `<div><strong style="color: #00ff41;">${file.name}</strong><p style="opacity: 0.7; font-size: 0.9rem;">${(file.size / 1024 / 1024).toFixed(2)} MB</p></div><audio controls src="${URL.createObjectURL(file)}"></audio>`; trackList.appendChild(trackDiv); } }
-function sendMessage() { const input = document.getElementById('chatInput'); const chatBox = document.getElementById('chatBox'); if (input.value.trim()) { const userMsg = document.createElement('div'); userMsg.className = 'chat-message'; userMsg.innerHTML = `<strong>You:</strong> ${input.value}`; chatBox.appendChild(userMsg); setTimeout(() => { const aiMsg = document.createElement('div'); aiMsg.className = 'chat-message'; aiMsg.innerHTML = `<strong>AI Agent:</strong> Bet, I hear you. That track needs more 808. Send me the file in MusicPlayer and I’ll break it down.`; chatBox.appendChild(aiMsg); chatBox.scrollTop = chatBox.scrollHeight; }, 1000); input.value = ''; chatBox.scrollTop = chatBox.scrollHeight; } }
+function showTab(tabName) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const trackList = document.getElementById('trackList');
+    const trackDiv = document.createElement('div');
+    trackDiv.className = 'track-item';
+    trackDiv.innerHTML = `<div><strong style="color: #00ff41;">${file.name}</strong><p style="opacity: 0.7; font-size: 0.9rem;">${(file.size / 1024 / 1024).toFixed(2)} MB</p></div><audio controls src="${URL.createObjectURL(file)}"></audio>`;
+    trackList.appendChild(trackDiv);
+  }
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const chatBox = document.getElementById('chatBox');
+  if (input.value.trim()) {
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-message';
+    userMsg.innerHTML = `<strong>You:</strong> ${input.value}`;
+    chatBox.appendChild(userMsg);
+    setTimeout(() => {
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'chat-message';
+      aiMsg.innerHTML = `<strong>AI Agent:</strong> Bet, I hear you. That track needs more 808. Send me the file in MusicPlayer and I’ll break it down.`;
+      chatBox.appendChild(aiMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+}
+
+// Merch Inspector JS - added to same location
+function showMerchPanel(id, btn) {
+  document.querySelectorAll('.merch-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.merch-tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
 </script>
 </body>
 </html>
