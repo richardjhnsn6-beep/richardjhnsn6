@@ -1,0 +1,5 @@
+File size: 1047 characters
+Has <!DOCTYPE html>: True
+Has <html> tag: True
+Has <body> tag: True
+Has </html>: True
